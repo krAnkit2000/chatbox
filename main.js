@@ -14,7 +14,6 @@ const usernameInput = document.getElementById("username");
 const joinBtn = document.getElementById("join-btn");
 const clearBtn = document.getElementById("clear-btn");
 const inputArea = document.getElementById("input-area");
-
 let username = "";
 
 // 🔹 Join Chat
