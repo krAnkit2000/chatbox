@@ -1,0 +1,230 @@
+body {
+  font-family: Arial, sans-serif;
+background-image: linear-gradient(120deg, #a1c4fd 0%, #c2e9fb 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+}
+
+.chat-container {
+    min-height: 31rem;
+  width: 400px;
+/* background: #020024;
+background: linear-gradient(11deg, rgba(2, 0, 36, 0.96) 0%, rgba(9, 9, 121, 1) 35%, rgba(8, 23, 131, 1) 0%, rgba(3, 146, 212, 1) 79%, rgba(0, 212, 255, 1) 100%); */
+  
+background-image: linear-gradient(to top, #9890e3 0%, #b1f4cf 100%);
+border-radius: 10px;
+  overflow: scroll;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+}
+
+h2 {
+  text-align: center;
+background: #996e83;
+background: radial-gradient(circle, rgba(153, 110, 131, 1) 0%, rgba(148, 187, 233, 1) 100%);  color: white;
+  margin: 0;
+  padding: 10px;
+}
+
+.name-area {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.name-area input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.name-area button {
+  margin-left: 8px;
+  background: #25d366;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+/* .chat-box {
+  flex: 1;
+  padding: 10px;
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+} */
+
+.chat-box {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;      /* 👈 Scroll bar enable karega */
+  display: flex;
+  flex-direction: column;
+  max-height: 400px;     /* 👈 Fixed height set kar do */
+}
+
+
+.chat-box::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.chat-box::-webkit-scrollbar-thumb:hover {
+  background: #888;
+}
+.message {
+  margin: 5px 0;
+  padding: 8px 12px;
+  border-radius: 15px;
+  max-width: 75%;
+  word-wrap: break-word;
+}
+
+.user {
+  background: #dcf8c6;
+  align-self: flex-end;
+}
+
+.other {
+  background: #f1f0f0;
+  align-self: flex-start;
+}
+
+.input-area {
+  display: flex;
+  border-top: 1px solid #ccc;
+  padding: 10px;
+}
+
+#message-input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#send-btn {
+  background: #0084ff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  margin-left: 8px;
+  cursor: pointer;
+}
+.chat-box{
+    overflow: scroll;
+}
+
+#clear-btn {
+        width: 100%;
+  background: #ff4d4d;
+  color: white;
+  font-family: monospace;
+  font-weight: 700;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  align-self: center; /* Center align in flex container */
+}
+
+
+/* clear chat  */
+.message {
+  margin: 5px 0;
+  padding: 8px 12px;
+  border-radius: 15px;
+  max-width: 75%;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+}
+
+.message strong {
+  font-size: 0.8rem;
+  color: #555;
+  margin-top: 4px; /* name neeche */
+}
+
+.user {
+  background: #dcf8c6;
+  align-self: flex-end;
+  text-align: left;
+}
+
+.other {
+  background: #f1f0f0;
+  align-self: flex-start;
+  text-align: left;
+}
+/* 
+.message {
+  margin: 5px 0;
+  padding: 8px 12px;
+  border-radius: 15px;
+  max-width: 75%;
+  word-wrap: break-word;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+} */
+
+
+
+.message {
+    margin: 5px 0;
+    padding: 4px 18px;
+    border-radius: 7px;
+    max-width: 75%;
+    word-wrap: break-word;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+.msg-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1px;
+  margin-top: 12px;
+}
+
+.msg-name {
+  font-size: 0.85rem;
+  color: #555;
+  font-weight: bold;
+}
+
+.msg-time {
+  font-size: 0.7rem;
+  color: #999;
+  margin-left: 10px;
+  white-space: nowrap;
+}
+
+.msg-text {
+  font-size: 1rem;
+  margin: 0;
+}
+
+.delete-btn {
+background: transparent;
+  color: rgb(66, 102, 247);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  padding: 5px 6px;
+  font-size: 0.8rem;
+}
