@@ -37,7 +37,7 @@ h2 {
 /* ====== Name Area ====== */
 .name-area {
   display: flex;
-  padding: 10px;
+  padding: 1px;
   border-bottom: 1px solid #ccc;
 }
 
@@ -54,7 +54,7 @@ h2 {
   border-color: #0084ff;
 }
 
-.name-area button {
+/* .name-area button {
   margin-left: 8px;
   background: #25d366;
   color: white;
@@ -64,7 +64,7 @@ h2 {
   cursor: pointer;
   font-weight: 600;
   transition: background-color 0.3s ease;
-}
+} */
 
 .name-area button:hover {
   background: #1ebe5a;
@@ -202,25 +202,36 @@ h2 {
   box-shadow: 0 6px 9px rgba(0,0,0,0.15);
 }
 
-/* ====== Clear Chat Button ====== */
-#clear-btn {
-  width: 100%;
+
+#create-chat-btn, #join-btn{
+    background: #1ebe5a !important;
+}
+#join-area Button{
+
   background: #ff4d4d;
   color: white;
   font-family: monospace;
   font-weight: 700;
   border: none;
-  padding: 12px 12px;
+  padding: 10px 12px;
   border-radius: 8px;
   cursor: pointer;
-  margin: 10px auto 15px auto;
+  margin: 10px auto 15px auto !important;
   transition: background-color 0.3s ease;
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
   display: block;
 }
 
+
+/* ====== Clear Chat Button ====== */
+
+
 #clear-btn:hover {
   background: #e04343;
+}
+
+#join-area.hidden {
+  display: none !important;
 }
 
 /* ====== Responsive ====== */

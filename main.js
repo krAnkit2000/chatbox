@@ -12,31 +12,57 @@ const messageInput = document.getElementById("message-input");
 const sendBtn = document.getElementById("send-btn");
 const usernameInput = document.getElementById("username");
 const joinBtn = document.getElementById("join-btn");
+const createChatBtn = document.getElementById("create-chat-btn");
 const clearBtn = document.getElementById("clear-btn");
 const inputArea = document.getElementById("input-area");
+const joinArea = document.getElementById("join-area");
+const bottomControls = document.getElementById("bottom-controls");
+const chatIdInput = document.getElementById("chat-id");
+const currentChatIdDisplay = document.getElementById("current-chat-id");
+
 let username = "";
+let chatId = "";
 
-// 🔹 Join Chat
+// Utility: generate a short random chat id (6 chars)
+function generateChatId(len = 6) {
+  const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  let id = "";
+  for (let i = 0; i < len; i++) id += chars[Math.floor(Math.random() * chars.length)];
+  return id;
+}
 
-
+// Create new chat id button
+createChatBtn.addEventListener("click", () => {
+  const newId = generateChatId(8);
+  chatIdInput.value = newId;
+  chatIdInput.focus();
+});
 
 
 joinBtn.addEventListener("click", () => {
   username = usernameInput.value.trim();
-  if (!username) return alert("Please enter your name!");
+  const providedChatId = chatIdInput.value.trim();
 
-  document.querySelector(".name-area").style.display = "none";
+  if (!username) return alert("Please enter your name!");
+  if (!providedChatId) return alert("Please enter or create a chat ID to join.");
+
+  chatId = providedChatId;
+
+  // Hide the entire join area (inputs + create/join buttons)
+  joinArea.style.display = "none";
+
+  // Show chat UI
   chatBox.style.display = "flex";
   inputArea.style.display = "flex";
+  bottomControls.style.display = "flex";
 
-  // Clear button show karna yahan
-  document.getElementById("clear-btn").style.display = "block";
+  currentChatIdDisplay.textContent = chatId;
+  clearBtn.style.display = "block";
 
-  listenForMessages();
+  chatBox.innerHTML = ""; // clear any previous messages
+  listenForMessages(chatId);
   messageInput.focus();
 });
-
-
 
 // 🔹 Send Message
 sendBtn.addEventListener("click", sendMessage);
@@ -48,21 +74,23 @@ function sendMessage() {
   const text = messageInput.value.trim();
   if (!text) return;
 
-  push(ref(db, "messages"), {
+  // push message to room-specific path
+  push(ref(db, `messages/${chatId}`), {
     name: username,
     text,
     time: new Date().toLocaleTimeString()
-  });
+  }).catch(err => console.error("Push error:", err));
 
   messageInput.value = "";
 }
 
-// 🔹 Listen for messages
-function listenForMessages() {
-  const messagesRef = ref(db, "messages");
+// 🔹 Listen for messages in the chosen chat room
+function listenForMessages(roomId) {
+  const messagesRef = ref(db, `messages/${roomId}`);
+  // onChildAdded will return all existing children then new ones
   onChildAdded(messagesRef, (snapshot) => {
     const msg = snapshot.val();
-    const key = snapshot.key; // 🔹 Firebase key
+    const key = snapshot.key; // Firebase key
     addMessage(msg, key);
   });
 }
@@ -72,39 +100,56 @@ function addMessage(msg, key) {
   const div = document.createElement("div");
   div.classList.add("message");
   div.classList.add(msg.name === username ? "user" : "other");
-div.innerHTML = `
- <p class="msg-text">${msg.text}</p>
-  <div class="msg-header">
-    <strong class="msg-name">${msg.name}</strong>
-    <span class="msg-time">${msg.time}</span>
-    ${msg.name === username ? '<button class="delete-btn">🪣</button>' : ''}
-  </div>
- 
-`;
+
+  div.innerHTML = `
+    <p class="msg-text">${escapeHtml(msg.text)}</p>
+    <div class="msg-header">
+      <strong class="msg-name">${escapeHtml(msg.name)}</strong>
+      <span class="msg-time">${escapeHtml(msg.time)}</span>
+      ${msg.name === username ? '<button class="delete-btn">🪣</button>' : ''}
+    </div>
+  `;
 
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
 
-  // Delete button logic
+  // Delete button logic (delete only from the current room path)
   if (msg.name === username) {
     const deleteBtn = div.querySelector(".delete-btn");
-    deleteBtn.addEventListener("click", () => {
-      if (confirm("Delete this message?")) {
-        remove(ref(db, `messages/${key}`))
-          .catch(err => console.error("Delete error:", err));
-        div.remove();
-      }
-    });
+    if (deleteBtn) {
+      deleteBtn.addEventListener("click", () => {
+        if (confirm("Delete this message?")) {
+          remove(ref(db, `messages/${chatId}/${key}`))
+            .then(() => {
+              div.remove();
+            })
+            .catch(err => console.error("Delete error:", err));
+        }
+      });
+    }
   }
 }
 
-// 🔹 Clear chat both locally & on Firebase
+// 🔹 Clear chat for current room only (both locally & on Firebase)
 clearBtn.addEventListener("click", () => {
-  if (!confirm("Are you sure you want to delete all messages?")) return;
-  remove(ref(db, "messages"))
+  if (!chatId) return alert("No chat joined.");
+  if (!confirm("Are you sure you want to delete all messages in this chat?")) return;
+  remove(ref(db, `messages/${chatId}`))
     .then(() => {
       chatBox.innerHTML = "";
-      alert("All messages deleted!");
+      alert("All messages deleted in chat: " + chatId);
     })
     .catch(err => console.error("Error deleting messages:", err));
 });
+
+// small helper to avoid injecting HTML when showing messages
+function escapeHtml(unsafe) {
+  if (unsafe == null) return "";
+  return unsafe
+    .toString()
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
