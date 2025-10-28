@@ -25,7 +25,7 @@ let chatId = "";
 
 // Utility: generate a short random chat id (6 chars)
 function generateChatId(len = 6) {
-  const chars = "ABCDEFGHJKMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
+  const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
   let id = "";
   for (let i = 0; i < len; i++) id += chars[Math.floor(Math.random() * chars.length)];
   return id;
@@ -33,7 +33,7 @@ function generateChatId(len = 6) {
 
 // Create new chat id button
 createChatBtn.addEventListener("click", () => {
-  const newId = generateChatId(8);
+  const newId = generateChatId(6);
   chatIdInput.value = newId;
   chatIdInput.focus();
 });
