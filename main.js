@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded, remove } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, remove, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 import { firebaseConfig } from './config.js';
 
 // 🔹 Firebase Init
@@ -23,6 +23,10 @@ const currentChatIdDisplay = document.getElementById("current-chat-id");
 let username = "";
 let chatId = "";
 
+// Auto delete time (12 hours)
+// const MESSAGE_EXPIRY_TIME = 12 * 60 * 60 * 1000; // 12 hours in ms
+const MESSAGE_EXPIRY_TIME = 1 * 60 * 1000; // 1 minute in milliseconds
+
 // Utility: generate a short random chat id (6 chars)
 function generateChatId(len = 6) {
   const chars = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
@@ -31,14 +35,14 @@ function generateChatId(len = 6) {
   return id;
 }
 
-// Create new chat id button
+// 🔹 Create new chat id button
 createChatBtn.addEventListener("click", () => {
   const newId = generateChatId(6);
   chatIdInput.value = newId;
   chatIdInput.focus();
 });
 
-
+// 🔹 Join Chat
 joinBtn.addEventListener("click", () => {
   username = usernameInput.value.trim();
   const providedChatId = chatIdInput.value.trim();
@@ -60,7 +64,10 @@ joinBtn.addEventListener("click", () => {
   clearBtn.style.display = "block";
 
   chatBox.innerHTML = ""; // clear any previous messages
+
   listenForMessages(chatId);
+  autoDeleteOldMessages(chatId); // ✅ start auto delete check
+
   messageInput.focus();
 });
 
@@ -78,7 +85,8 @@ function sendMessage() {
   push(ref(db, `messages/${chatId}`), {
     name: username,
     text,
-    time: new Date().toLocaleTimeString()
+    time: new Date().toLocaleTimeString(),
+    timestamp: Date.now() // ✅ store exact time for expiry
   }).catch(err => console.error("Push error:", err));
 
   messageInput.value = "";
@@ -87,10 +95,9 @@ function sendMessage() {
 // 🔹 Listen for messages in the chosen chat room
 function listenForMessages(roomId) {
   const messagesRef = ref(db, `messages/${roomId}`);
-  // onChildAdded will return all existing children then new ones
   onChildAdded(messagesRef, (snapshot) => {
     const msg = snapshot.val();
-    const key = snapshot.key; // Firebase key
+    const key = snapshot.key;
     addMessage(msg, key);
   });
 }
@@ -120,15 +127,47 @@ function addMessage(msg, key) {
       deleteBtn.addEventListener("click", () => {
         if (confirm("Delete this message?")) {
           remove(ref(db, `messages/${chatId}/${key}`))
-            .then(() => {
-              div.remove();
-            })
+            .then(() => div.remove())
             .catch(err => console.error("Delete error:", err));
         }
       });
     }
   }
 }
+
+
+function autoDeleteOldMessages(chatId) {
+  const chatRef = ref(db, `messages/${chatId}`);
+
+  // Pehli baar load hone par bhi check kare
+  const checkAndDelete = (snapshot) => {
+    if (snapshot.exists()) {
+      const now = Date.now();
+      snapshot.forEach((child) => {
+        const msg = child.val();
+        if (msg.timestamp && now - msg.timestamp > MESSAGE_EXPIRY_TIME) {
+          remove(ref(db, `messages/${chatId}/${child.key}`))
+            .then(() => console.log(`🗑️ Deleted old message: ${child.key}`))
+            .catch(err => console.error("Auto-delete error:", err));
+        }
+      });
+    }
+  };
+
+  // Firebase ke data change hone par bhi run hoga
+  onValue(chatRef, (snapshot) => {
+    checkAndDelete(snapshot);
+  });
+
+  // Har 30 seconds me bhi check kare (backup timer)
+  setInterval(async () => {
+    const snapshot = await (await import("https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js")).get(chatRef);
+    if (snapshot.exists()) {
+      checkAndDelete(snapshot);
+    }
+  }, 30000); // 30 seconds
+}
+
 
 // 🔹 Clear chat for current room only (both locally & on Firebase)
 clearBtn.addEventListener("click", () => {
@@ -142,7 +181,7 @@ clearBtn.addEventListener("click", () => {
     .catch(err => console.error("Error deleting messages:", err));
 });
 
-// small helper to avoid injecting HTML when showing messages
+// 🔹 Escape unsafe HTML
 function escapeHtml(unsafe) {
   if (unsafe == null) return "";
   return unsafe

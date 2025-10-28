@@ -18,13 +18,13 @@ body {
 .chat-container {
   background: linear-gradient(180deg, #f8faff, #dfeaff);
   width: 370px;
-  height: 600px;               /* ✅ fixed height for consistent layout */
+  height: 600px;               
   border-radius: 25px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.1);
   padding: 10px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;            /* prevents content from spilling */
+  overflow: hidden;           
 }
 
 .chat-container h2 {
@@ -41,21 +41,22 @@ body {
   background: #f4f7fb;
   border-radius: 20px;
   padding: 15px;
-  overflow-y: auto;           /* ✅ scrollable when messages overflow */
+  overflow-y: auto;          
   display: flex;
   flex-direction: column;
   gap: 10px;
-  scroll-behavior: smooth;    /* ✅ smooth scroll */
+  scroll-behavior: smooth;    
 }
 
 /* --- Message Styles --- */
 .message {
-  max-width: 75%;
-  padding: 10px 14px;
-  border-radius: 15px;
-  word-wrap: break-word;
-  line-height: 1.4;
+      max-width: 75%;
+    padding: 3px 27px;
+    border-radius: 11px;
+    word-wrap: break-word;
+    line-height: 1.4;
 }
+
 
 .message.user {
   align-self: flex-end;
@@ -75,6 +76,7 @@ body {
 }
 
 .msg-header {
+        gap: 5px;
   display: flex;
   align-items: center;
   justify-content: space-between;
