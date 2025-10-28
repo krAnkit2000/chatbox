@@ -65,6 +65,7 @@ body {
 }
 
 .message.user > .reply-block{
+        margin-left: -6px;
     display: flex;
     align-items: flex-start;
     background: #f5fff5;
@@ -234,20 +235,21 @@ body {
 
 
 .reply-block {
-  display: flex;
-  align-items: flex-start;
-  background: #f5fff5;
-  border-left: 3px solid #25d366;
-  border-radius: 8px;
-  padding: 5px 10px;
-  margin-bottom: 4px;
+ display: flex;
+     margin-inline-start: -6px;
+    align-items: flex-start;
+    background: #f5fff5;
+    border-left: 3px solid #25d366;
+    border-radius: 8px;
+    padding: 4px 3px;
+    margin-bottom: 4px;
 }
 
 .reply-line {
   width: 4px;
   background: #25d366;
   border-radius: 2px;
-  margin-right: 8px;
+  /* margin-right: 8px; */
 }
 
 .reply-content {
