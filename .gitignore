@@ -1,3 +1,4 @@
 # Ignore Firebase config
 config.js
 .vercel
+main.js
