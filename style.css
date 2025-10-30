@@ -131,7 +131,7 @@ body {
     border-radius: 10px;
     border: 1px solid #ccc;
     outline: none;
-    font-size: 14px;
+    font-size: 16px;
 }
 #send-btn {
     background: #2196f3;
@@ -162,7 +162,7 @@ body {
   border-radius: 10px;
   border: 1px solid #ccc;
   outline: none;
-  font-size: 14px;
+  font-size: 16px;
   width: 160px;
 }
 
