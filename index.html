@@ -17,24 +17,23 @@
     <div class="name-area" id="join-area">
       <input type="text" id="username" placeholder="Enter your name" />
       <input type="text" id="chat-id" placeholder="Enter chat ID (or create new)" />
-     
-    </div>
-
-     <div class="name-area" id="join-area">
-       
-      <button id="join-btn">Join Chat</button>
+   
+         <button id="join-btn">Join Chat</button>
         <button id="create-chat-btn">Create New ChatID</button>
-        <button id="clear-btn" style="display:none; margin: 10px;">Clear Chat</button>
+  
     </div>
 
- 
+     <div class="clearbtn" id="join-area clearbtn"> 
+        <button id="clear-btn" style="display:none;">Clear Chat</button>
+    </div>
+
 
     <div class="input-area" id="input-area" style="display: none;">
       <input type="text" id="message-input" placeholder="Type your message..." />
       <div><button id="send-btn">Send</button></div>
     </div>
 
-    <div class="name-area" style="display:none" id="bottom-controls">
+    <div class="id-area" style="display:none" id="bottom-controls">
       <div style="display:flex; align-items:center; gap:12px;">
         <div class="chat_Id">💬 Your Chat ID: <strong id="current-chat-id">—</strong></div>
       </div>

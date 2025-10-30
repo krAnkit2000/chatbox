@@ -46,6 +46,7 @@ createChatBtn.addEventListener("click", () => {
 });
 
 // Join Chat
+// Join Chat
 joinBtn.addEventListener("click", () => {
   username = usernameInput.value.trim();
   const providedChatId = chatIdInput.value.trim();
@@ -55,19 +56,29 @@ joinBtn.addEventListener("click", () => {
 
   chatId = providedChatId;
 
+  // hide the join inputs + buttons area if you have one
   joinArea.style.display = "none";
+
+  // show chat + input areas
   chatBox.style.display = "flex";
   inputArea.style.display = "flex";
   bottomControls.style.display = "flex";
 
   currentChatIdDisplay.textContent = chatId;
+
+  // show Clear button
   clearBtn.style.display = "block";
+
+  // hide Join and Create buttons
+  joinBtn.style.display = "none";
+  createChatBtn.style.display = "none";
 
   chatBox.innerHTML = "";
   listenForMessages(chatId);
   autoDeleteOldMessages(chatId);
   messageInput.focus();
 });
+
 
 // Send message
 sendBtn.addEventListener("click", sendMessage);
