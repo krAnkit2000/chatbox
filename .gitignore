@@ -1,4 +1,6 @@
 # Ignore Firebase config
 config.js
-.vercel
 main.js
+style.css
+.vercel 
+chat_app/main.js
