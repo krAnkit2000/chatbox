@@ -25,7 +25,8 @@ let chatId = "";
 let replyingTo = null;
 
 // Auto delete time (1 min)
-const MESSAGE_EXPIRY_TIME = 1 * 60 * 1000;
+const MESSAGE_EXPIRY_TIME = 30 * 1000;
+const CHECK_INTERVAL = 10 * 1000;   
 
 // ✅ Touch device detection (reliable)
 const isTouchDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -230,7 +231,7 @@ function autoDeleteOldMessages(chatId) {
   setInterval(async () => {
     const snapshot = await get(chatRef);
     checkAndDelete(snapshot);
-  }, 30000);
+  }, CHECK_INTERVAL);
 }
 
 // 🧹 Clear Chat
