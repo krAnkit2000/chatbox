@@ -8,8 +8,12 @@
 </head>
 <body>
   <div class="chat-container">
-    <h2> 💬 Thread </h2>
-
+    <h2> 💬 TalkUp </h2>
+ <div class="id-area" style="display:none" id="bottom-controls">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <div class="chat_Id">🔐Your Chat ID: <strong id="current-chat-id">—</strong></div>
+      </div>
+    </div>
     <div class="chat-box" id="chat-box" style="display: none;"></div>
 
 
@@ -33,11 +37,7 @@
       <div><button id="send-btn">Send</button></div>
     </div>
 
-    <div class="id-area" style="display:none" id="bottom-controls">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <div class="chat_Id">💬 Your Chat ID: <strong id="current-chat-id">—</strong></div>
-      </div>
-    </div>
+   
   </div>
 
   <!-- Firebase 11.x ES module SDK -->
